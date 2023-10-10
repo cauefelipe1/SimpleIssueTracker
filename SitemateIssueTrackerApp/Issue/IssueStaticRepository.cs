@@ -23,12 +23,12 @@ public class IssueStaticRepository : IIssueRepository
         
         _recordedIssues.Add(newDto);
 
-        return newDto.IssueId;
+        return newDto.IssueId.Value;
     }
 
     public void UpdateIssue(IssueDto dto)
     {
-        var issue = GetIssue(dto.IssueId);
+        var issue = GetIssue(dto.IssueId!.Value);
 
         if (issue is null)
             throw new Exception($"The issue {dto.IssueId} was not found.");

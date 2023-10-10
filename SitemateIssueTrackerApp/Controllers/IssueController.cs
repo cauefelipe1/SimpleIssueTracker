@@ -1,4 +1,6 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SitemateIssueTrackerApp.Issue;
 using SitemateIssueTrackerApp.Models;
 
 namespace SitemateIssueTrackerApp.Controllers;
@@ -7,21 +9,58 @@ namespace SitemateIssueTrackerApp.Controllers;
 [Route("[controller]")]
 public class IssueController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
-    private readonly ILogger<IssueController> _logger;
-
-    public IssueController(ILogger<IssueController> logger)
+    private readonly ISender _sender;
+    
+    public IssueController(ISender sender)
     {
-        _logger = logger;
+        _sender = sender;
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<IssueModel?>> Get(Guid issueId)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var issue = await _sender.Send(new IssueMediator.GetIssueCommand(issueId));
+
+        if (issue is null)
+            return NotFound();
+
+        return Ok(issue);
     }
 
-    [HttpGet]
-    public IEnumerable<IssueModel> Get()
+    [HttpPost]
+    public async Task<ActionResult<Guid>> NewIssue(IssueModel model)
     {
-        return Enumerable.Empty<IssueModel>();
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var issueId = await _sender.Send(new IssueMediator.CreateIssueCommand(model));
+        
+        return Ok(issueId);
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult> UpdateIssue(IssueModel model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        await _sender.Send(new IssueMediator.UpdateIssueCommand(model));
+
+        return Ok();
+    }
+    
+    [HttpDelete]
+    public async Task<ActionResult> DeleteIssue(Guid issueId)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        await _sender.Send(new IssueMediator.DeleteIssueCommand(issueId));
+
+        return Ok();
     }
 }
