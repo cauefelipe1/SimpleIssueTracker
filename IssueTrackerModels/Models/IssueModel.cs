@@ -1,4 +1,4 @@
-namespace SitemateIssueTrackerApp.Models;
+namespace IssueTrackerModels.Models;
 
 public class IssueModel
 {

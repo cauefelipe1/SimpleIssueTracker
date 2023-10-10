@@ -1,6 +1,6 @@
 using System.Globalization;
+using IssueTrackerModels.Models;
 using MediatR;
-using SitemateIssueTrackerApp.Models;
 
 namespace SitemateIssueTrackerApp.Issue;
 

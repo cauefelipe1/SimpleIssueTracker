@@ -1,7 +1,7 @@
+using IssueTrackerModels.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SitemateIssueTrackerApp.Issue;
-using SitemateIssueTrackerApp.Models;
 
 namespace SitemateIssueTrackerApp.Controllers;
 

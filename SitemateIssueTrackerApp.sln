@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SitemateIssueTrackerApp", "SitemateIssueTrackerApp\SitemateIssueTrackerApp.csproj", "{58A40F7E-0277-4E5F-885F-E3098612421B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTrackerApiClient", "IssueTrackerApiClient\IssueTrackerApiClient.csproj", "{FB21E574-9C85-445D-9FEC-BF02771A5191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTrackerModels", "IssueTrackerModels\IssueTrackerModels.csproj", "{B1FFCC37-4B13-4B94-ABF8-1DA03DBC24F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{58A40F7E-0277-4E5F-885F-E3098612421B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58A40F7E-0277-4E5F-885F-E3098612421B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58A40F7E-0277-4E5F-885F-E3098612421B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB21E574-9C85-445D-9FEC-BF02771A5191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB21E574-9C85-445D-9FEC-BF02771A5191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB21E574-9C85-445D-9FEC-BF02771A5191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB21E574-9C85-445D-9FEC-BF02771A5191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1FFCC37-4B13-4B94-ABF8-1DA03DBC24F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FFCC37-4B13-4B94-ABF8-1DA03DBC24F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1FFCC37-4B13-4B94-ABF8-1DA03DBC24F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FFCC37-4B13-4B94-ABF8-1DA03DBC24F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
