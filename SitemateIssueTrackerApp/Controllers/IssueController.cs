@@ -17,7 +17,7 @@ public class IssueController : ControllerBase
         _sender = sender;
     }
     
-    [HttpGet]
+    [HttpGet("{issueId}")]
     public async Task<ActionResult<IssueModel?>> Get(Guid issueId)
     {
         if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ public class IssueController : ControllerBase
         return Ok();
     }
     
-    [HttpDelete]
+    [HttpDelete("{issueId}")]
     public async Task<ActionResult> DeleteIssue(Guid issueId)
     {
         if (!ModelState.IsValid)

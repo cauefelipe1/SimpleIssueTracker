@@ -1,13 +1,15 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using System.Text.Json;
 using IssueTrackerModels.Models;
 
 namespace IssueTrackerApiClient;
 
 public class IssueTrackerClient
 {
-    private readonly string _baseUrl = "http://localhost:5274/Issue";
+    private readonly string _baseUrl = "http://localhost:5274";
     private Guid? _issueId = null;
 
     private HttpClient _httpClient;
@@ -57,12 +59,10 @@ public class IssueTrackerClient
         if (optInt == 1)
         {
             _issueId = await CreateIssue();
-            Console.WriteLine($"Issue created! Id{_issueId}");
 
         } else if (optInt == 2)
         {
             await UpdateIssue();
-            Console.WriteLine("Issue updated!");
 
         } else if (optInt == 3)
         {
@@ -71,14 +71,15 @@ public class IssueTrackerClient
             if (issue is null)
                 Console.WriteLine("Issue not found");
 
-            string json = System.Text.Json.JsonSerializer.Serialize(issue);
+            string json = JsonSerializer.Serialize(issue);
             
             Console.WriteLine("Issue:");
             Console.WriteLine(json);
 
         } else if (optInt == 4)
         {
-        
+            await DeleteIssue();
+            
         } else if (optInt == 0)
         {
             Console.WriteLine("See you!");
@@ -102,14 +103,16 @@ public class IssueTrackerClient
 
         Console.WriteLine("Creating the issue.");
         
-        var resp = await _httpClient.PostAsync("",
+        var resp = await _httpClient.PostAsync("issue",
             new StringContent(System.Text.Json.JsonSerializer.Serialize(newIssue), Encoding.UTF8, 
                 "application/json")
             );
 
         string id = await resp.Content.ReadAsStringAsync();
         
-        return System.Text.Json.JsonSerializer.Deserialize<Guid>(id);
+        Console.WriteLine($"Issue created! Id: {_issueId}");
+
+        return JsonSerializer.Deserialize<Guid>(id);
     }
     
     private async Task UpdateIssue()
@@ -130,11 +133,12 @@ public class IssueTrackerClient
 
         Console.WriteLine("Updating the issue.");
         
-        await _httpClient.PatchAsync("",
-            new StringContent(System.Text.Json.JsonSerializer.Serialize(updatedIssue), Encoding.UTF8, 
+        await _httpClient.PutAsync("issue",
+            new StringContent(JsonSerializer.Serialize(updatedIssue), Encoding.UTF8, 
                 "application/json")
         );
-
+        
+        Console.WriteLine("Issue updated!");
     }
     
     private async Task<IssueModel?> GetIssue()
@@ -142,10 +146,36 @@ public class IssueTrackerClient
         Console.WriteLine("Retrieving the issue.");
         Guid id = _issueId ?? Guid.Empty;
 
-        var resp = await _httpClient.GetAsync($"/{id}");
+        var resp = await _httpClient.GetAsync($"issue/{id}");
+
+        if (resp.StatusCode == HttpStatusCode.NotFound)
+            return null;
         
         string issue = await resp.Content.ReadAsStringAsync();
+
+        var jsonOpt = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
         
-        return System.Text.Json.JsonSerializer.Deserialize<IssueModel>(issue);
+        return JsonSerializer.Deserialize<IssueModel>(issue, jsonOpt);
+    }
+    
+    private async Task DeleteIssue()
+    {
+        if (_issueId is null)
+        {
+            Console.WriteLine("you must create the issue first.");
+
+            return;
+        }
+        
+        Console.WriteLine("Deleting the issue.");
+
+        await _httpClient.DeleteAsync($"issue/{_issueId}");
+
+        _issueId = null;
+        
+        Console.WriteLine("Issue deleted!");
     }
 }
